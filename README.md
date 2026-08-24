@@ -11,7 +11,27 @@ Scrapes the **Poder Judicial de Chile** public property-auction listing
 
 [`remates_2026-08-23.csv`](remates_2026-08-23.csv) — **121 auctions**, filtered to
 Competencia **Civil**, Corte **C.A. de Concepción**, Tipo **C**, dates
-**23/08/2026 → 23/09/2026** (61 `Agendado`, 60 `Reprogramado`).
+**23/08/2026 → 23/09/2026** (61 `Agendado`, 60 `Reprogramado`). An extra `Ebook`
+column links to any downloaded case file (see step 2).
+
+## Case files ("ebooks")
+
+Each remates row maps to a court case you can open in **Consulta Unificada** and
+download as a single expediente PDF ("Ebook"). Downloaded PDFs live in
+[`docs/`](docs/); the CSV's `Ebook` column holds an Excel `=HYPERLINK(...)` to
+the local file (relative path, so it survives moving the folder — clickable on open).
+
+Done so far: `C-81-2026` @ *Juzgado de Letras y Gar. de Laja* (TESORERÍA
+PROVINCIAL DE LOS ÁNGELES/OYARCE) →
+[`docs/pjud_C-81-2026_Laja_TESORERIA-OYARCE_ebook.pdf`](docs/pjud_C-81-2026_Laja_TESORERIA-OYARCE_ebook.pdf)
+(9 pp). Add more with:
+
+```bash
+python link_ebook.py --causa C-81-2026 --file docs/<the.pdf> --label "Ebook C-81-2026 (Laja)"
+```
+
+The download itself is browser-driven (WAF + invisible reCAPTCHA v3) — see
+**Step 2** in [CLAUDE.md](CLAUDE.md) for the endpoints and exact steps.
 
 ## How the site works (reverse-engineered 2026-08-23)
 
@@ -61,4 +81,6 @@ real HTML-table parser over browser-captured fragments and writes the CSV.
 |------|---------|
 | `browser_scrape.js` | In-page extractor: JWT pagination + CSV download (the working capture). |
 | `scrape_remates.py` | `web_fetch` Tier-1 probe + HTML-fragment→CSV parser. |
-| `remates_2026-08-23.csv` | Latest captured dataset (121 rows). |
+| `link_ebook.py` | Add a clickable `Ebook` HYPERLINK column to the CSV for a given Causa. |
+| `remates_2026-08-23.csv` | Latest captured dataset (121 rows, with `Ebook` column). |
+| `docs/` | Downloaded case files ("ebooks"). |

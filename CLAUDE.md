@@ -78,10 +78,21 @@ under `docs/`, and add a clickable `Ebook` HYPERLINK column to the CSV.
    `newebookcivil.php?dtaEbook=<token>` in-page) → save the PDF to `docs/`.
 4. `python link_ebook.py --causa <RIT> --file docs/<pdf>`.
 
+## Step 3 — Chrome-free automation (`pjud_playwright.py`)  🚧 blocked
+Attempt at an unattended headless scraper. **Currently blocked:** Playwright
+Firefox won't launch (VC++ SxS), full/headed Chromium won't launch (`spawn
+UNKNOWN`), only `chromium-headless-shell` runs — and headless is rejected by the
+F5 WAF at `consultarRemates.php`. Owner is **iffy on Playwright**; the
+browser-console method (`browser_scrape.js` + step-2 snippet) is the reliable
+path. Full write-up + options in **`HANDOFF.md`**.
+
 ## Files
 | File | Purpose |
 |------|---------|
 | `browser_scrape.js` | In-page remates extractor (JWT pagination) → CSV download. |
 | `scrape_remates.py` | `web_fetch` Tier-1 probe + HTML-fragment→CSV parser. |
-| `remates_2026-08-23.csv` | Step-1 dataset (121 rows). |
+| `link_ebook.py` | Add a clickable `Ebook` HYPERLINK column to the CSV for a Causa. |
+| `pjud_playwright.py` | Headless-browser scraper attempt — 🚧 blocked by WAF (see HANDOFF.md). |
+| `HANDOFF.md` | Standalone status/handoff doc for another person. |
+| `remates_2026-08-23.csv` | Step-1 dataset (121 rows + `Ebook` column). |
 | `docs/` | Downloaded case files ("ebooks"). |
